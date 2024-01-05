@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 const authRoutes = require('./route/authRoutes');
+const animeRoutes = require('./route/animeRoutes');
 require('dotenv').config();
 
 const app = express();
@@ -18,6 +19,7 @@ sequelize.sync({ force: false })
   });
 
 app.use('/auth', authRoutes);
+app.use('/api', animeRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -7,6 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+RUn npm i express
 
 # Bundle app source
 COPY . .
