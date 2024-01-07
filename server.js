@@ -4,12 +4,20 @@ const sequelize = require('./config/database');
 const authRoutes = require('./route/authRoutes');
 const animeRoutes = require('./route/animeRoutes');
 const userRoutes = require('./route/userRoutes');
+cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+
+corsOptions = { 
+  origin: '*'
+};
+
+
+app.use(cors(corsOptions));
 
 sequelize.sync({ force: false })
   .then(() => {

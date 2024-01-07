@@ -1,9 +1,19 @@
+
 const express = require('express');
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middlewares/authMiddlewares'); 
 
 const router = express.Router();
 
+/**
+ * @api {get} /users Request all users
+ * @apiName GetUsers
+ * @apiGroup User
+ *
+ * @apiSuccess {Object[]} users List of users.
+ * @apiSuccess {Number} users.id User's unique ID.
+ * @apiSuccess {String} users.name User's name.
+ */
 router.get('/users', authMiddleware.isAdmin, async (req, res) => {
     try {
         const users = await userController.getAll();
@@ -13,6 +23,14 @@ router.get('/users', authMiddleware.isAdmin, async (req, res) => {
     }  
 });
 
+
+/**
+ * @api {get} /user/:id Request User information
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {Number} id Users unique ID.
+ */
 router.get('/user/:id', authMiddleware.isAdmin, async (req, res) => { 
     try {
         const user = await userController.getOneById(req.params.id, res);
@@ -23,6 +41,13 @@ router.get('/user/:id', authMiddleware.isAdmin, async (req, res) => {
 
 });
 
+/**
+ * @api {put} /user/:id Modify user information
+ * @apiName PutUser
+ * @apiGroup User
+ *
+ * @apiParam {Number} id Users unique ID.
+ */
 router.put('/user/:id', authMiddleware.isAdminOrIdRelatedToUser, async (req, res) => {
     try {
         const updatedUser = await userController.updateUser(req.params.id, req.body, res);
@@ -32,6 +57,12 @@ router.put('/user/:id', authMiddleware.isAdminOrIdRelatedToUser, async (req, res
     }
 });
 
+/**
+ * @api {delete} /user/:id Delete user information
+ * @apiName DeleteUser
+ * @apiGroup User
+ * @apiParam {Number} id Users unique ID.
+ */
 router.delete('/user/:id', authMiddleware.isAdminOrIdRelatedToUser, async (req, res) => { 
     try {
         await userController.deleteUser(req.params.id, res);
