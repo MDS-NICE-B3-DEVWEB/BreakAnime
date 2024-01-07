@@ -1,4 +1,4 @@
-const Anime = require('../models/Anime');
+const Anime = require('../models/animeModel');
 
 class AnimeService {
     
@@ -14,22 +14,25 @@ class AnimeService {
     // Récupérer un anime par son ID
     static async getAnimeById(id) {
         try {
-            const anime = await Anime.findByPk(id);
+            const anime = await Anime.findByPk(id);    
             if (!anime) {
-                throw new Error('Anime non trouvé');
+                const error = new Error('Anime non trouvé');
+                error.name = 'NOT_FOUND';
+                throw error;
             }
             return anime;
         } catch (error) {
-            throw new Error('Erreur lors de la récupération de l\'anime');
+            throw error;
         }
     }
 
     // Créer un nouvel anime
-    static async createAnime(data) {
+    static async createAnime(data) { 
         try {
+            data.date_sortie = new Date(data.date_sortie).toISOString();
             return await Anime.create(data);
         } catch (error) {
-            throw new Error('Erreur lors de la création de l\'anime');
+            throw error;
         }
     }
 
@@ -38,12 +41,14 @@ class AnimeService {
         try {
             const anime = await Anime.findByPk(id);
             if (!anime) {
-                throw new Error('Anime non trouvé');
+                const error = new Error('Anime non trouvé');
+                error.name = 'NOT_FOUND';
+                throw error;
             }
             await anime.update(data);
             return anime;
         } catch (error) {
-            throw new Error('Erreur lors de la mise à jour de l\'anime');
+            throw error;
         }
     }
 
@@ -52,10 +57,16 @@ class AnimeService {
         try {
             const anime = await Anime.findByPk(id);
             if (!anime) {
-                throw new Error('Anime non trouvé');
+                const error = new Error('Anime non trouvé');
+                error.name = 'NOT_FOUND';
+                throw error;
+            } else {
+                anime.destroy();
             }
         } catch (error) {
-            throw new Error('Erreur lors de la suppression de l\'anime');
-        }
+            throw error;
+        }        
     }
 }
+
+module.exports = AnimeService;

@@ -18,6 +18,24 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+
+const isAdmin = (req, res, next) => { 
+  if (req.user.role == 0) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  next();
+};
+
+
+const isIdRelatedToUser = (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  next();
+};
+
 module.exports = {
-  authenticateToken
+  authenticateToken, isAdmin, isIdRelatedToUser
 };
