@@ -33,7 +33,7 @@ router.get('/animes/:id', async (req, res) => {
 });
 
 // Créer un nouvel anime
-router.post('/animes', authMiddleware.authenticateToken, async (req, res) => {
+router.post('/animes', authMiddleware.isAdmin, async (req, res) => {
   try {
     const anime = await AnimeService.createAnime(req.body);
     res.status(201).json(anime);
@@ -43,7 +43,7 @@ router.post('/animes', authMiddleware.authenticateToken, async (req, res) => {
 });
 
 // Mettre à jour un anime
-router.put('/animes/:id', authMiddleware.authenticateToken, async (req, res) => {
+router.put('/animes/:id', authMiddleware.isAdmin, async (req, res) => {
   try {
     const anime = await AnimeService.updateAnime(req.params.id, req.body);
     res.status(200).json(anime);
@@ -57,7 +57,7 @@ router.put('/animes/:id', authMiddleware.authenticateToken, async (req, res) => 
 });
 
 // Supprimer un anime
-router.delete('/animes/:id',authMiddleware.authenticateToken, async (req, res) => {
+router.delete('/animes/:id',authMiddleware.isAdmin, async (req, res) => {
   try {
     await AnimeService.deleteAnime(req.params.id);
     res.status(204).send(); // Pas de contenu à renvoyer après suppression
