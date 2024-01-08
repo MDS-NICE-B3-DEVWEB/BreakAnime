@@ -22,18 +22,31 @@ const login = async (username, password) => {
 };
 
 const register = async (username, password) => {
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await User.create({ username, password: hashedPassword });
-  
-      const token = jwt.sign({ userId: user.id }, config.secret, { expiresIn: '1h' });
-  
-      return token;
-    } catch (error) {
-      throw new Error('Registration failed. Username may already be in use.');
-    }
-  };
-  
+  if (!username || username.trim() === '') {
+    throw new Error('Username cannot be empty');
+  }
+
+  if (username.length < 4 || username.length > 8) {
+    throw new Error('Username must be between 4 and 8 characters');
+  }
+
+  const existingUser = await User.findOne({ where: { username } });
+  if (existingUser) {
+    throw new Error('Username already in use');
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, password: hashedPassword });
+
+    const token = jwt.sign({ userId: user.id }, config.secret, { expiresIn: '1h' });
+
+    return token;
+  } catch (error) {
+    throw new Error('Registration failed');
+  }
+};
+
   module.exports = {
     login,
     register
