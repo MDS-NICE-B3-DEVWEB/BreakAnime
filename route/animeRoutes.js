@@ -49,9 +49,9 @@ router.get('/animes/:id', async (req, res) => {
  * @api {post} /animes create anime
  * @apiName createAnime
  * @apiGroup Anime
- *  @apiParam {String} titre Titre de l'anime. 
- *  @apiParam {String} description Description de l'anime.
- *  @apiParam {String} image Image de l'anime.
+ * @apiParam {String} titre Titre de l'anime. 
+ * @apiParam {String} description Description de l'anime.
+ * @apiParam {String} image Image de l'anime.
  * @apiParam {Date} date_sortie Date de sortie de l'anime.
  * @apiParam {String} type Type de l'anime.
  * @apiParam {String} status Status de l'anime.
@@ -75,9 +75,9 @@ router.post('/animes', authMiddleware.isAdmin, async (req, res) => {
  * @api {put} /animes mettre à jour les information d'un anime
  * @apiName modifyAnimeById
  * @apiGroup Anime
- *  @apiParam {String} titre Titre de l'anime. 
- *  @apiParam {String} description Description de l'anime.
- *  @apiParam {String} image Image de l'anime.
+ * @apiParam {String} titre Titre de l'anime. 
+ * @apiParam {String} description Description de l'anime.
+ * @apiParam {String} image Image de l'anime.
  * @apiParam {Date} date_sortie Date de sortie de l'anime.
  * @apiParam {String} type Type de l'anime.
  * @apiParam {String} status Status de l'anime.
