@@ -2,10 +2,18 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const config = require('../config/config');
+const { Op } = require('sequelize');
 
-const login = async (username, password) => {
-  const user = await User.findOne({ where: { username } });
 
+const login = async (email, username, password) => {
+  const user = await User.findOne({ 
+    where: { 
+      [Op.or]: [
+        { username: username != undefined ? username : null},
+        { email: email != undefined ? email : null}
+      ] 
+    } 
+  });
   if (!user) {
     throw new Error('User not found');
   }
@@ -21,7 +29,7 @@ const login = async (username, password) => {
   return token;
 };
 
-const register = async (username, password) => {
+const register = async (name, email, username, password) => {
   if (!username || username.trim() === '') {
     throw new Error('Username cannot be empty');
   }
@@ -37,7 +45,7 @@ const register = async (username, password) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, password: hashedPassword });
+    const user = await User.create({  name, email, username, password: hashedPassword });
 
     const token = jwt.sign({ userId: user.id }, config.secret, { expiresIn: '1h' });
 
